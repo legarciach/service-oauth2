@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UsuarioService implements UserDetailsService {
+public class UsuarioService implements UserDetailsService, IUsuarioService {
 
     private Logger log = LoggerFactory.getLogger(UsuarioService.class);
 
@@ -38,5 +38,15 @@ public class UsuarioService implements UserDetailsService {
                 collect(Collectors.toList());
         log.info("Usuario '"+username+"' fue Autenticado");
         return new User(usuario.getUsername(),usuario.getPassword(), usuario.getEnabled(), true, true, true, autorities);
+    }
+
+    @Override
+    public Usuario findByUsername(String username) {
+        return clienteFeign.findByUsername(username);
+    }
+
+    @Override
+    public Usuario update(Usuario usuario, Long id) {
+        return clienteFeign.update(usuario, id);
     }
 }
